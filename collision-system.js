@@ -1,9 +1,12 @@
 "use strict";
 let canvas;
 let context;
-let secondsPassed;
-let oldTimeStamp;
+let secondsPassed = 0;
+let oldTimeStamp = 0;
+let movingSpeed = 50;
 let fps;
+let rectX = 0;
+let rectY = 0;
 
 window.onload = init;
 
@@ -16,20 +19,11 @@ function init() {
 }
 
 function gameLoop(timeStamp) {
-  // Calculate the number of seconds passed since the last frame
+  // Calculate how much time has passed
   secondsPassed = (timeStamp - oldTimeStamp) / 1000;
   oldTimeStamp = timeStamp;
-
-  // Calculate fps
-  fps = Math.round(1 / secondsPassed);
-
-  // Draw number to the screen
-  context.fillStyle = "white";
-  context.fillRect(0, 0, 200, 100);
-  context.font = "25px Arial";
-  context.fillStyle = "black";
-  context.fillText("FPS: " + fps, 10, 30);
-
+  //update
+  update(secondsPassed);
   // Perform the drawing operation
   draw();
 
@@ -37,10 +31,14 @@ function gameLoop(timeStamp) {
   window.requestAnimationFrame(gameLoop);
 }
 
-function update() {}
+function update(secondsPassed) {
+  rectX += movingSpeed * secondsPassed;
+  rectY += movingSpeed * secondsPassed;
+}
 
 function draw() {
-  let randomColor = Math.random() > 0.5 ? "#ff8080" : "#0099b0";
-  context.fillStyle = randomColor;
-  context.fillRect(100, 50, 200, 175);
+  // Clear the entire canvas
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "#ff8080";
+  context.fillRect(rectX, rectY, 150, 100);
 }
